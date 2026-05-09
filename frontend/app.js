@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000/api/v1';
+const API_BASE_URL = '/api/v1';
 
 document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     e.preventDefault();
