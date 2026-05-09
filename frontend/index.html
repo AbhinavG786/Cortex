@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cortex</title>
+    <style>
+        
+        :root {
+            --bg-body: #f4f4f5;
+            --bg-surface: #ffffff;
+            --text-main: #18181b;
+            --text-muted: #71717a;
+            --border: #e4e4e7;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --error: #ef4444;
+            --radius: 8px;
+        }
+
+        * { box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 3rem 1.5rem; 
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        h1 { font-size: 1.75rem; font-weight: 600; margin-bottom: 2rem; letter-spacing: -0.02em; }
+        h2 { font-size: 1.25rem; font-weight: 600; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-top: 2rem; }
+        h3 { font-size: 1rem; font-weight: 500; color: var(--text-muted); margin-bottom: 1rem; }
+
+        .card { 
+            background: var(--bg-surface); 
+            border: 1px solid var(--border); 
+            padding: 1.5rem; 
+            border-radius: var(--radius); 
+            margin-bottom: 2rem; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        form { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+        
+        input[type="file"] {
+            flex-grow: 1;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            padding: 0.5rem;
+            border: 1px dashed var(--border);
+            border-radius: var(--radius);
+            background: var(--bg-body);
+            transition: border-color 0.2s;
+        }
+
+        input[type="file"]:hover { border-color: var(--text-muted); }
+
+        input[type="file"]::file-selector-button {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            color: var(--text-main);
+            font-weight: 500;
+            cursor: pointer;
+            margin-right: 1rem;
+            transition: background 0.2s;
+        }
+
+        input[type="file"]::file-selector-button:hover { background: var(--bg-body); }
+
+        button { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 0.6rem 1.2rem; 
+            border-radius: 6px; 
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer; 
+            transition: all 0.2s; 
+        }
+        
+        button:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-1px); }
+        button:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
+
+        #results-container { 
+            display: none; 
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .video-wrapper { 
+            width: 100%; 
+            max-width: 600px; 
+            margin: 1.5rem 0; 
+            background: #000; 
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        
+        video { width: 100%; display: block; }
+
+        .table-container { 
+            max-height: 400px; 
+            overflow-y: auto; 
+            border: 1px solid var(--border); 
+            border-radius: var(--radius);
+            background: var(--bg-surface);
+        }
+        
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+        th, td { padding: 10px 16px; border-bottom: 1px solid var(--border); }
+        
+        th { 
+            background: #fafafa; 
+            font-weight: 500; 
+            color: var(--text-muted);
+            position: sticky; 
+            top: 0; 
+            box-shadow: 0 1px 0 var(--border);
+        }
+        
+        tbody tr:hover { background: #fafafa; }
+
+        .status { margin-top: 1rem; font-size: 0.9rem; font-weight: 500; color: var(--text-muted); }
+        .error { color: var(--error); }
+    </style>
+</head>
+<body>
+
+    <h1>Cortex - Video Face Detection API</h1>
+
+    <div class="card">
+        <h3>Upload Video</h3>
+        <form id="uploadForm">
+            <input type="file" id="videoFile" accept=".mp4,.avi,.mov" required>
+            <button type="submit" id="submitBtn">Upload & Process</button>
+        </form>
+        <div id="statusMessage" class="status"></div>
+    </div>
+
+    <div id="results-container">
+        <h2>Results</h2>
+        
+        <div class="video-wrapper">
+            <video id="processedVideo" controls></video>
+        </div>
+
+        <h3>Regions of Interest (ROI)</h3>
+        <div class="table-container">
+            <table id="roiTable">
+                <thead>
+                    <tr>
+                        <th>Frame</th>
+                        <th>X Min</th>
+                        <th>Y Min</th>
+                        <th>Width</th>
+                        <th>Height</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

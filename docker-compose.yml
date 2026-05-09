@@ -32,6 +32,8 @@ services:
         condition: service_healthy
     volumes:
       - ./uploads:${UPLOAD_DIR}
+    command: >
+        sh -c "python -c 'from app import create_app; create_app()' && gunicorn --bind 0.0.0.0:5000 --workers 2 run:app"
 
   # Static HTML/JS Frontend
   frontend:
